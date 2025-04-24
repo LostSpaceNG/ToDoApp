@@ -34,8 +34,9 @@ A screenshot of the app window.
 ## 🛠 How to Run
 
 1. Clone the repo:
-   ```bash
-   git clone https://github.com/LostSpaceNG/ToDoApp.git
+	```bash
+	git clone https://github.com/LostSpaceNG/ToDoApp.git
+	```
 2. Open the .sln file in Visual Studio
 3. Build & run the project (F5)
 4. Use the app 🎉
@@ -62,3 +63,7 @@ MIT License — feel free to use, learn from, or improve this project.
 ## 🙋‍♂️ Author
 
 Made with love by *`Spaced Out`* — a C# developer learning in public.
+
+---
+
+## 📘 [Development Process Documentation](DEVDOC.md)

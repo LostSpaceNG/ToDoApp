@@ -24,6 +24,7 @@ C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoAp
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.AssemblyInfoInputs.cache
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.AssemblyInfo.cs
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.csproj.CoreCompileInputs.cache
+C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.sourcelink.json
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.csproj.Up2Date
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.dll
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\refint\ToDoApp.dll

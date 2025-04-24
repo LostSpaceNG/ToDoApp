@@ -43,6 +43,7 @@ To create a simple, minimal, and functional To-Do List application using a `Chec
         Title TEXT NOT NULL,
         IsDone INTEGER DEFAULT 0
     );
+    ```
 
 - Implemented the following core functionalities:
   - ➕ Add new task
@@ -137,3 +138,39 @@ MIT License
 Beginner-friendly C# Developer building a portfolio with clean, real-world projects.
 
 GitHub: https://github.com/LostSpaceNG
+
+
+---
+
+-- # -- # -- # -- # -- # -- # -- # -- # -- # -- # -- # -- # --
+
+---
+
+## 📌 Version 1.1.0 – Task Groups & Filtering (Released on: 24-04-2025)
+
+### ✨ New Features
+
+- Introduced **Task Groups** for organizing to-dos by category
+- Created `TaskGroups` table in database
+- Tasks now belong to a selected group via `GroupId`
+- Added group selection dropdown
+- Added filtering logic to load only tasks for selected group
+
+### 🔧 Technical Improvements
+
+- Refactored `LoadTasks()` method to accept group filter
+- Connected group dropdown with filtering logic
+- Introduced constant `AppVersion` displayed in app title
+
+### 🧪 Testing & Usage
+
+- Build and run the app from Visual Studio
+- Found at: `/bin/Debug/netX.X-windows/ToDoApp.exe`
+- Use desktop shortcut for quick UX testing
+
+---
+
+Next planned version: `v1.2.0`
+
+- UI redesign: Home screen with Task Group icons
+- Better task navigation and user experience
