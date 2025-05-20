@@ -1,181 +1,254 @@
-﻿using System.Data.SqlClient;
-using System.Data.SQLite;
-using System.Xml.Serialization;
+﻿using ToDoApp.Controls;
+using ToDoApp.Models;
+using ToDoApp.Services;
 
 namespace ToDoApp
 {
     public partial class Form1 : Form
     {
+        // App Version Info
+        private const string AppVersion = "1.2.0";
+
+        private Group? selectedGroup;
+        private GroupCardsPanel? groupCardsPanel;
+        private Bitmap groupIcon = Properties.Resources.TaskGroupIcon;
+        private Bitmap addGroupIcon = Properties.Resources.AddNewIcon;
+
+        private readonly DatabaseService dbService = new DatabaseService();
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        // App Version Info
-        private const string AppVersion = "1.1.0";
-
-        // Connection String for DB Setup
-        string connectionString = "Data Source=tasks.db;Version=3;";
-
-        // Creates DB if doesn't exist
-        private void CreateDatabase()
+        private void Form1_Load(object sender, EventArgs e)
         {
-            using (var conn = new SQLiteConnection(connectionString))
+            this.Text += $" | v{AppVersion}";
+
+            dbService.InitializeDatabase();
+            InitializeGroupCardsPanel();
+            ShowGroupView();
+
+            LoadGroupCards(dbService.GetAllGroups());
+        }
+
+        // Workaround to fix UI layout bug on first form load
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            groupCardsPanel!.RefreshLayout();
+        }
+
+        #region Group View Logic
+
+        // Show Group View
+        private void ShowGroupView()
+        {
+            panelTasks.Visible = false;
+            groupCardsPanel!.Visible = true;
+        }
+
+        // Initialize the container panel for the group cards
+        private void InitializeGroupCardsPanel()
+        {
+            groupCardsPanel = new GroupCardsPanel
             {
-                conn.Open();
+                Dock = DockStyle.Fill,
+                BackColor = panelTasks.BackColor,
+                ForeColor = panelTasks.ForeColor,
+            };
 
-                // Create Tasks Table if not exists
-                string query = @"CREATE TABLE IF NOT EXISTS Tasks (
-                                Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                Title TEXT NOT NULL,
-                                IsDone INTEGER DEFAULT 0
-                             )";
-                SQLiteCommand cmd = new SQLiteCommand(query, conn);
-                cmd.ExecuteNonQuery();
+            this.Controls.Add(groupCardsPanel);
+        }
 
-                // Create TaskGroups Table if not exists
-                var cmd1 = new SQLiteCommand(@"
-                    CREATE TABLE IF NOT EXISTS TaskGroups (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Name TEXT NOT NULL UNIQUE
-                    );", conn);
-                cmd1.ExecuteNonQuery();
+        // Load and render all Groups as GroupCard Controls
+        private void LoadGroupCards(List<Group> groups)
+        {
+            var cards = new List<Control>();
 
-                // Insert Default Group if not exists
-                var cmd2 = new SQLiteCommand(@"
-                    INSERT OR IGNORE INTO TaskGroups (Id, Name)
-                    VALUES (1, 'Default');", conn);
-                cmd2.ExecuteNonQuery();
+            // Create the "New List" Button
+            var newListCard = new GroupCard
+            {
+                ForeColor = Color.White,
+                IsNewListBtn = true,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+            newListCard.SetGroupData("New List", addGroupIcon);
+            newListCard.Click += CreateNewGroup!;
+            cards.Add(newListCard);
 
-                // Add GroupId to Tasks table if not exists
-                var cmd3 = new SQLiteCommand(@"
-                    PRAGMA table_info(Tasks);", conn);
-
-                bool hasGroupId = false;
-
-                using (var reader = cmd3.ExecuteReader())
+            // Create all cards
+            foreach (var group in groups)
+            {
+                var card = new GroupCard
                 {
-                    while (reader.Read())
+                    Tag = group,
+                    ContextMenuStrip = contextMenuGroup,
+                    ForeColor = Color.White,
+                };
+                card.SetGroupData(group.Name, groupIcon);
+                card.Click += GroupCard_Click!;
+                cards.Add(card);
+            }
+
+            groupCardsPanel!.SetCards(cards);
+        }
+
+        // "Click" - Event Handler for Group Card
+        private void GroupCard_Click(object sender, EventArgs e)
+        {
+            if (sender is GroupCard card && card.Tag is Group group)
+            {
+                selectedGroup = group;
+                labelGroupTitle.Text = selectedGroup.Name;
+                LoadTasksForGroup(selectedGroup.Id);
+                ShowTaskView();
+            }
+        }
+
+        // Creates a new Group
+        private void CreateNewGroup(object sender, EventArgs e)
+        {
+            // Load PromptForm to ask for user input
+            using (PromptForm prompt = new PromptForm("New List", "Enter the list name:"))
+            {
+                if (prompt.ShowDialog() == DialogResult.OK)
+                {
+                    string groupName = prompt.ResponseText;
+
+                    if (!string.IsNullOrWhiteSpace(groupName))
                     {
-                        if (reader["name"].ToString() == "GroupId")
+                        // Add the new Group and refresh the Group View
+                        dbService.AddGroup(groupName);
+                        LoadGroupCards(dbService.GetAllGroups());
+                        // Refresh Panel to avoid UI Bug
+                        groupCardsPanel!.RefreshLayout();
+                    }
+                }
+            }
+        }
+
+        // Rename a Group
+        private void RenameGroupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (contextMenuGroup.SourceControl is GroupCard groupCard && groupCard.Tag is Group group)
+            {
+                // Load PromptForm to ask for user input
+                using (PromptForm prompt = new PromptForm("Rename List", "Enter the new list name:"))
+                {
+                    // Pass old value
+                    prompt.ResponseText = group.Name;
+
+                    if (prompt.ShowDialog() == DialogResult.OK)
+                    {
+                        string newGroupName = prompt.ResponseText;
+
+                        if (!string.IsNullOrWhiteSpace(newGroupName))
                         {
-                            hasGroupId = true;
-                            break;
+                            // Update the Group and refresh the Group View
+                            dbService.RenameGroup(group.Id, newGroupName);
+                            LoadGroupCards(dbService.GetAllGroups());
+                            // Refresh Panel to avoid UI Bug
+                            groupCardsPanel!.RefreshLayout();
                         }
                     }
                 }
+            }
+        }
 
-                if (!hasGroupId)
+        // Delete a Group
+        private void DeleteGroupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (contextMenuGroup.SourceControl is GroupCard groupCard && groupCard.Tag is Group group)
+            {
+                // Ask for confirmation
+                var confirm = MessageBox.Show($"Delete list '{group.Name}' and all its tasks?", "Confirm", MessageBoxButtons.YesNo);
+                if (confirm == DialogResult.Yes)
                 {
-                    var alterCmd = new SQLiteCommand(@"
-                        ALTER TABLE Tasks ADD COLUMN GroupId INTEGER DEFAULT 1;", conn);
-                    alterCmd.ExecuteNonQuery();
+                    // Delete the Group and refresh the Group View
+                    dbService.DeleteGroup(group.Id);
+                    LoadGroupCards(dbService.GetAllGroups());
+                    // Refresh Panel to avoid UI Bug
+                    groupCardsPanel!.RefreshLayout();
                 }
             }
         }
 
-        // Loads Tasks from DB
-        private void LoadTasks(int? groupId = null)
+        #endregion
+
+        #region Task Panel Logic
+
+        // Show Task Panel
+        private void ShowTaskView()
+        {
+            groupCardsPanel!.Visible = false;
+            panelTasks.Visible = true;
+        }
+
+        // Load Tasks for a selected Group
+        private void LoadTasksForGroup(int groupId)
         {
             // Clear Task list
-            clbTasks.Items.Clear();
+            checkedListBoxTasks.Items.Clear();
 
-            // Create connection with DB
-            using (var conn = new SQLiteConnection(connectionString))
+            // Get and load Tasks
+            List<TaskItem> tasks = dbService.GetTasksByGroupId(groupId);
+            foreach (TaskItem task in tasks)
             {
-                conn.Open();
+                int index = checkedListBoxTasks.Items.Add(task);
+                checkedListBoxTasks.SetItemChecked(index, task.IsDone);
+            }
+        }
 
-                // Create SQL Query
-                string query = "SELECT * FROM Tasks";
-                if (groupId != null)
-                {
-                    query += " WHERE GroupId = @groupId";
-                }
+        //
+        // Event Handlers
+        //
+        private void BtnBackToMenu_Click(object sender, EventArgs e)
+        {
+            ShowGroupView();
+        }
 
-                // Prepare SQL Command
-                var command = new SQLiteCommand(query, conn);
-                if (groupId != null)
+        private void BtnAddTask_Click(object sender, EventArgs e)
+        {
+            // Load PromptForm to ask for user input
+            using (PromptForm prompt = new PromptForm("New Task", "Enter the task:"))
+            {
+                if (prompt.ShowDialog() == DialogResult.OK)
                 {
-                    command.Parameters.AddWithValue("@groupId", groupId);
-                }
+                    string taskTitle = prompt.ResponseText;
 
-                // Read data from Tasks Table
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
+                    if (!string.IsNullOrWhiteSpace(taskTitle))
                     {
-                        TaskItem item = new TaskItem
-                        {
-                            Id = Convert.ToInt32(reader["Id"]),
-                            Title = reader["Title"].ToString()!,
-                            IsDone = Convert.ToInt32(reader["IsDone"]) == 1,
-                            GroupId = Convert.ToInt32(reader["GroupId"])
-                        };
-
-                        // Add Tasks to UI Task list
-                        clbTasks.Items.Add(item, item.IsDone);
+                        // Add the new Task and refresh the Task View
+                        dbService.AddTask(taskTitle, selectedGroup!.Id);
+                        LoadTasksForGroup(selectedGroup.Id);
                     }
                 }
             }
         }
 
-        private void btnAddTask_Click(object sender, EventArgs e)
+        private void BtnEditTask_Click(object sender, EventArgs e)
         {
-            string taskTitle = textBoxTask.Text.Trim();
-
-            // Return, if Task is empty
-            if (string.IsNullOrWhiteSpace(taskTitle))
+            if (checkedListBoxTasks.SelectedItem is TaskItem selectedTask)
             {
-                MessageBox.Show("Please enter a Task first.", "Task Empty", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // Add Task to Group
-            if (comboBoxTaskGroups.SelectedItem is Group selectedGroup)
-            {
-                // Save Task in DB
-                using (var conn = new SQLiteConnection(connectionString))
+                // Load PromptForm to ask for user input
+                using (PromptForm prompt = new PromptForm("Edit Task", "Edit the task:"))
                 {
-                    conn.Open();
+                    // Pass old value
+                    prompt.ResponseText = selectedTask.Title;
 
-                    string sql = "INSERT INTO Tasks (Title, IsDone, GroupId) VALUES (@task, 0, @groupId)";
-                    SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                    cmd.Parameters.AddWithValue("@task", taskTitle);
-                    cmd.Parameters.AddWithValue("@groupId", selectedGroup.Id);
-                    cmd.ExecuteNonQuery();
+                    if (prompt.ShowDialog() == DialogResult.OK)
+                    {
+                        string newTaskTitle = prompt.ResponseText;
+
+                        if (!string.IsNullOrWhiteSpace(newTaskTitle))
+                        {
+                            // Update the Task and refresh the Task View
+                            dbService.EditTask(selectedTask.Id, newTaskTitle);
+                            LoadTasksForGroup(selectedGroup!.Id);
+                        }
+                    }
                 }
-
-                // Clear input field
-                textBoxTask.Clear();
-                // Refresh Task list
-                LoadTasks(selectedGroup.Id);
-            }
-            else
-            {
-                // Show Info Message
-                MessageBox.Show("Please select a Task Group.", "Task Group Not Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private void btnDeleteTask_Click(object sender, EventArgs e)
-        {
-            // Remove selected Task from Tasklist
-            if (clbTasks.SelectedIndex >= 0)
-            {
-                string taskText = clbTasks.SelectedItem!.ToString()!;
-
-                // Remove from DB
-                using (var conn = new SQLiteConnection(connectionString))
-                {
-                    conn.Open();
-                    string sql = "DELETE FROM Tasks WHERE Title = @task";
-                    SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                    cmd.Parameters.AddWithValue("@task", taskText);
-                    cmd.ExecuteNonQuery();
-                }
-
-                // Remove from UI
-                clbTasks.Items.RemoveAt(clbTasks.SelectedIndex);
             }
             else
             {
@@ -184,107 +257,37 @@ namespace ToDoApp
             }
         }
 
-        private void clbTasks_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void BtnDeleteTask_Click(object sender, EventArgs e)
+        {
+            if (checkedListBoxTasks.SelectedItem is TaskItem selectedTask)
+            {
+                // Delete the Task and refresh the Task View
+                dbService.DeleteTask(selectedTask.Id);
+                LoadTasksForGroup(selectedGroup!.Id);
+            }
+            else
+            {
+                // Show Info Message
+                MessageBox.Show("Please select a Task first.", "Task Not Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void CheckedListBoxTasks_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             // Update the DB after the UI has updated
             // (makes sure we are reading the correct, updated checkbox state)
             this.BeginInvoke(new Action(() =>
             {
-                string taskText = clbTasks.Items[e.Index].ToString()!;
-                int isDone = clbTasks.GetItemChecked(e.Index) ? 1 : 0;
-
-                using (var conn = new SQLiteConnection(connectionString))
+                if (checkedListBoxTasks.SelectedItem is TaskItem selectedTask)
                 {
-                    conn.Open();
-                    string sql = "UPDATE Tasks SET IsDone = @isDone WHERE Title = @task";
-                    SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                    cmd.Parameters.AddWithValue("@isDone", isDone);
-                    cmd.Parameters.AddWithValue("@task", taskText);
-                    cmd.ExecuteNonQuery();
+                    bool isDone = checkedListBoxTasks.GetItemChecked(e.Index);
+
+                    dbService.UpdateTaskStatus(selectedTask.Id, isDone);
                 }
             }));
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            this.Text += $" | v{AppVersion}";
-            CreateDatabase();
-            LoadGroups();
-        }
+        #endregion
 
-        // -------- NEW ---------
-        private void LoadGroups()
-        {
-            // Clear Group list
-            comboBoxTaskGroups.Items.Clear();
-
-            // Retrieve Groups from DB
-            using (var conn = new SQLiteConnection(connectionString))
-            {
-                conn.Open();
-                var cmd = new SQLiteCommand(@"
-                    SELECT Id, Name FROM TaskGroups", conn);
-
-                var reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    comboBoxTaskGroups.Items.Add(new Group
-                    {
-                        Id = reader.GetInt32(0),
-                        Name = reader.GetString(1)
-                    });
-                }
-            }
-
-            // Auto-select first group
-            if (comboBoxTaskGroups.Items.Count > 0)
-                comboBoxTaskGroups.SelectedIndex = 0;
-        }
-
-        private void comboBoxTaskGroups_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxTaskGroups.SelectedItem is Group selectedGroup)
-            {
-                LoadTasks(selectedGroup.Id);
-            }
-        }
-
-        private void btnAddGroup_Click(object sender, EventArgs e)
-        {
-            // Ask user for list name
-            var input = Microsoft.VisualBasic.Interaction.InputBox("Enter new list name:", "New Task List");
-            if (string.IsNullOrWhiteSpace(input))
-                return;
-
-            // Add new list to Task Groups
-            using (var conn = new SQLiteConnection(connectionString))
-            {
-                conn.Open();
-                var cmd = new SQLiteCommand(@"
-                    INSERT OR IGNORE INTO TaskGroups (Name) VALUES (@name);", conn);
-                cmd.Parameters.AddWithValue("@name", input.Trim());
-                cmd.ExecuteNonQuery();
-            }
-
-            // Refresh Task Groups
-            LoadGroups();
-        }
-    }
-
-    public class Group
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public override string ToString() => Name;
-    }
-
-    public class TaskItem
-    {
-        public int Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public bool IsDone { get; set; }
-        public int GroupId { get; set; }
-        public override string ToString() => Title;
     }
 }

@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Projektmappenelemente", "{02F48432-5F68-4719-B32B-1CB4511B9FEA}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		CHANGELOG.md = CHANGELOG.md
 		DEVDOC.md = DEVDOC.md
 		README.md = README.md
 	EndProjectSection
@@ -25,5 +26,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {494B1E79-48CC-46B3-B92A-70F8006B85B1}
 	EndGlobalSection
 EndGlobal

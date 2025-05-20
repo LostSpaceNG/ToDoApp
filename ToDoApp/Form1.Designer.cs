@@ -28,152 +28,152 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBoxTask = new TextBox();
-            btnAddTask = new Button();
+            components = new System.ComponentModel.Container();
+            panelTasks = new Panel();
+            btnEditTask = new Button();
+            btnBackToMenu = new Button();
             btnDeleteTask = new Button();
-            clbTasks = new CheckedListBox();
-            comboBoxTaskGroups = new ComboBox();
-            btnAddGroup = new Button();
-            labelGroupInfo = new Label();
-            labelTaskArea = new Label();
-            labelListInfo = new Label();
-            labelTaskInfo = new Label();
+            btnAddTask = new Button();
+            checkedListBoxTasks = new CheckedListBox();
+            labelGroupTitle = new Label();
+            contextMenuGroup = new ContextMenuStrip(components);
+            renameGroupToolStripMenuItem = new ToolStripMenuItem();
+            deleteGroupToolStripMenuItem = new ToolStripMenuItem();
+            panelTasks.SuspendLayout();
+            contextMenuGroup.SuspendLayout();
             SuspendLayout();
             // 
-            // textBoxTask
+            // panelTasks
             // 
-            textBoxTask.Location = new Point(12, 209);
-            textBoxTask.Multiline = true;
-            textBoxTask.Name = "textBoxTask";
-            textBoxTask.ScrollBars = ScrollBars.Vertical;
-            textBoxTask.Size = new Size(400, 90);
-            textBoxTask.TabIndex = 0;
+            panelTasks.BackColor = Color.FromArgb(21, 21, 21);
+            panelTasks.Controls.Add(btnEditTask);
+            panelTasks.Controls.Add(btnBackToMenu);
+            panelTasks.Controls.Add(btnDeleteTask);
+            panelTasks.Controls.Add(btnAddTask);
+            panelTasks.Controls.Add(checkedListBoxTasks);
+            panelTasks.Controls.Add(labelGroupTitle);
+            panelTasks.Dock = DockStyle.Fill;
+            panelTasks.Location = new Point(0, 0);
+            panelTasks.Name = "panelTasks";
+            panelTasks.Size = new Size(762, 533);
+            panelTasks.TabIndex = 13;
+            panelTasks.Visible = false;
             // 
-            // btnAddTask
+            // btnEditTask
             // 
-            btnAddTask.AutoSize = true;
-            btnAddTask.Location = new Point(418, 207);
-            btnAddTask.Name = "btnAddTask";
-            btnAddTask.Size = new Size(128, 30);
-            btnAddTask.TabIndex = 2;
-            btnAddTask.Text = "Add Task";
-            btnAddTask.UseVisualStyleBackColor = true;
-            btnAddTask.Click += btnAddTask_Click;
+            btnEditTask.Anchor = AnchorStyles.Bottom;
+            btnEditTask.Location = new Point(319, 460);
+            btnEditTask.Name = "btnEditTask";
+            btnEditTask.Size = new Size(124, 29);
+            btnEditTask.TabIndex = 4;
+            btnEditTask.Text = "Edit Task";
+            btnEditTask.UseVisualStyleBackColor = true;
+            btnEditTask.Click += BtnEditTask_Click;
+            // 
+            // btnBackToMenu
+            // 
+            btnBackToMenu.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnBackToMenu.Location = new Point(618, 40);
+            btnBackToMenu.Name = "btnBackToMenu";
+            btnBackToMenu.Size = new Size(80, 29);
+            btnBackToMenu.TabIndex = 1;
+            btnBackToMenu.Text = "← Back";
+            btnBackToMenu.UseVisualStyleBackColor = true;
+            btnBackToMenu.Click += BtnBackToMenu_Click;
             // 
             // btnDeleteTask
             // 
-            btnDeleteTask.AutoSize = true;
-            btnDeleteTask.Location = new Point(418, 360);
+            btnDeleteTask.Anchor = AnchorStyles.Bottom;
+            btnDeleteTask.Location = new Point(475, 460);
             btnDeleteTask.Name = "btnDeleteTask";
-            btnDeleteTask.Size = new Size(128, 30);
-            btnDeleteTask.TabIndex = 3;
+            btnDeleteTask.Size = new Size(124, 29);
+            btnDeleteTask.TabIndex = 5;
             btnDeleteTask.Text = "Delete Task";
             btnDeleteTask.UseVisualStyleBackColor = true;
-            btnDeleteTask.Click += btnDeleteTask_Click;
+            btnDeleteTask.Click += BtnDeleteTask_Click;
             // 
-            // clbTasks
+            // btnAddTask
             // 
-            clbTasks.CheckOnClick = true;
-            clbTasks.FormattingEnabled = true;
-            clbTasks.Location = new Point(12, 360);
-            clbTasks.Name = "clbTasks";
-            clbTasks.Size = new Size(400, 180);
-            clbTasks.TabIndex = 5;
-            clbTasks.ItemCheck += clbTasks_ItemCheck;
+            btnAddTask.Anchor = AnchorStyles.Bottom;
+            btnAddTask.Location = new Point(163, 460);
+            btnAddTask.Name = "btnAddTask";
+            btnAddTask.Size = new Size(124, 29);
+            btnAddTask.TabIndex = 3;
+            btnAddTask.Text = "Add Task";
+            btnAddTask.UseVisualStyleBackColor = true;
+            btnAddTask.Click += BtnAddTask_Click;
             // 
-            // comboBoxTaskGroups
+            // checkedListBoxTasks
             // 
-            comboBoxTaskGroups.FormattingEnabled = true;
-            comboBoxTaskGroups.Location = new Point(12, 32);
-            comboBoxTaskGroups.Name = "comboBoxTaskGroups";
-            comboBoxTaskGroups.Size = new Size(400, 28);
-            comboBoxTaskGroups.TabIndex = 6;
-            comboBoxTaskGroups.SelectedIndexChanged += comboBoxTaskGroups_SelectedIndexChanged;
+            checkedListBoxTasks.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            checkedListBoxTasks.BackColor = Color.White;
+            checkedListBoxTasks.Font = new Font("Segoe UI Variable Small Semilig", 9.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            checkedListBoxTasks.FormattingEnabled = true;
+            checkedListBoxTasks.Location = new Point(64, 96);
+            checkedListBoxTasks.Name = "checkedListBoxTasks";
+            checkedListBoxTasks.Size = new Size(634, 316);
+            checkedListBoxTasks.TabIndex = 2;
+            checkedListBoxTasks.ItemCheck += CheckedListBoxTasks_ItemCheck;
             // 
-            // btnAddGroup
+            // labelGroupTitle
             // 
-            btnAddGroup.Location = new Point(418, 30);
-            btnAddGroup.Name = "btnAddGroup";
-            btnAddGroup.Size = new Size(128, 30);
-            btnAddGroup.TabIndex = 7;
-            btnAddGroup.Text = "Add List";
-            btnAddGroup.UseVisualStyleBackColor = true;
-            btnAddGroup.Click += btnAddGroup_Click;
+            labelGroupTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            labelGroupTitle.AutoEllipsis = true;
+            labelGroupTitle.Font = new Font("Segoe UI", 14F);
+            labelGroupTitle.ForeColor = Color.White;
+            labelGroupTitle.Location = new Point(64, 35);
+            labelGroupTitle.Name = "labelGroupTitle";
+            labelGroupTitle.Size = new Size(535, 32);
+            labelGroupTitle.TabIndex = 0;
+            labelGroupTitle.Text = "Title";
             // 
-            // labelGroupInfo
+            // contextMenuGroup
             // 
-            labelGroupInfo.AutoSize = true;
-            labelGroupInfo.Location = new Point(12, 9);
-            labelGroupInfo.Name = "labelGroupInfo";
-            labelGroupInfo.Size = new Size(149, 20);
-            labelGroupInfo.TabIndex = 8;
-            labelGroupInfo.Text = "Choose a Task Group:";
+            contextMenuGroup.ImageScalingSize = new Size(20, 20);
+            contextMenuGroup.Items.AddRange(new ToolStripItem[] { renameGroupToolStripMenuItem, deleteGroupToolStripMenuItem });
+            contextMenuGroup.Name = "contextMenuGroup";
+            contextMenuGroup.Size = new Size(133, 52);
             // 
-            // labelTaskArea
+            // renameGroupToolStripMenuItem
             // 
-            labelTaskArea.AutoSize = true;
-            labelTaskArea.Font = new Font("Segoe UI", 14F);
-            labelTaskArea.Location = new Point(187, 127);
-            labelTaskArea.Name = "labelTaskArea";
-            labelTaskArea.Size = new Size(208, 32);
-            labelTaskArea.TabIndex = 9;
-            labelTaskArea.Text = "Task Management";
+            renameGroupToolStripMenuItem.Name = "renameGroupToolStripMenuItem";
+            renameGroupToolStripMenuItem.Size = new Size(132, 24);
+            renameGroupToolStripMenuItem.Text = "Rename";
+            renameGroupToolStripMenuItem.Click += RenameGroupToolStripMenuItem_Click;
             // 
-            // labelListInfo
+            // deleteGroupToolStripMenuItem
             // 
-            labelListInfo.AutoSize = true;
-            labelListInfo.Location = new Point(12, 337);
-            labelListInfo.Name = "labelListInfo";
-            labelListInfo.Size = new Size(65, 20);
-            labelListInfo.TabIndex = 10;
-            labelListInfo.Text = "Task List:";
-            // 
-            // labelTaskInfo
-            // 
-            labelTaskInfo.AutoSize = true;
-            labelTaskInfo.Location = new Point(12, 186);
-            labelTaskInfo.Name = "labelTaskInfo";
-            labelTaskInfo.Size = new Size(83, 20);
-            labelTaskInfo.TabIndex = 11;
-            labelTaskInfo.Text = "Task Name:";
+            deleteGroupToolStripMenuItem.Name = "deleteGroupToolStripMenuItem";
+            deleteGroupToolStripMenuItem.Size = new Size(132, 24);
+            deleteGroupToolStripMenuItem.Text = "Delete";
+            deleteGroupToolStripMenuItem.Click += DeleteGroupToolStripMenuItem_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(582, 553);
-            Controls.Add(labelTaskInfo);
-            Controls.Add(labelListInfo);
-            Controls.Add(labelTaskArea);
-            Controls.Add(labelGroupInfo);
-            Controls.Add(btnAddGroup);
-            Controls.Add(comboBoxTaskGroups);
-            Controls.Add(clbTasks);
-            Controls.Add(btnDeleteTask);
-            Controls.Add(btnAddTask);
-            Controls.Add(textBoxTask);
-            FormBorderStyle = FormBorderStyle.Fixed3D;
-            MaximizeBox = false;
-            MinimumSize = new Size(600, 600);
+            ClientSize = new Size(762, 533);
+            Controls.Add(panelTasks);
+            MinimumSize = new Size(780, 580);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "ToDo App";
             Load += Form1_Load;
+            panelTasks.ResumeLayout(false);
+            contextMenuGroup.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private TextBox textBoxTask;
-        private Button btnAddTask;
+        private Panel panelTasks;
+        private Label labelGroupTitle;
+        private CheckedListBox checkedListBoxTasks;
+        private Button btnBackToMenu;
         private Button btnDeleteTask;
-        private CheckedListBox clbTasks;
-        private ComboBox comboBoxTaskGroups;
-        private Button btnAddGroup;
-        private Label labelGroupInfo;
-        private Label labelTaskArea;
-        private Label labelListInfo;
-        private Label labelTaskInfo;
+        private Button btnAddTask;
+        private ContextMenuStrip contextMenuGroup;
+        private ToolStripMenuItem renameGroupToolStripMenuItem;
+        private ToolStripMenuItem deleteGroupToolStripMenuItem;
+        private Button btnEditTask;
     }
 }

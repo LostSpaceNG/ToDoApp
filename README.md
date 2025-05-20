@@ -1,24 +1,32 @@
 ﻿# ✅ ToDoApp MVP
 
-A minimal yet functional **To-Do List desktop app** built in **C# WinForms** using a `CheckedListBox` for clean task management. Powered by **SQLite** for local storage.
+A minimal yet functional **To-Do List desktop app** built in **C# WinForms**, using a custom UI with `CheckedListBox` for tasks, *icon + label* cards for groups, and local **SQLite** database. Lightweight, fast, and fully self-contained — no .NET installation needed!
+
 
 ---
 
 ## ✨ Features
 
 - ✔️ Add new tasks
+- 🔄 Rename tasks
 - ✅ Mark tasks as done (with checkboxes!)
 - ❌ Delete completed tasks
-- 💾 Local database with SQLite
-- 🧠 Clean UI using Windows Forms
-- 🚀 Fast and lightweight — perfect for practice or use
+- 🗂 Organize tasks by groups
+- 🧩 Modern card-based group UI
+- 🔄 Rename & delete groups via context menu
+- 📋 Local data persistence with SQLite
+- 💬 Custom input prompt dialogs
+- 🚀 Fully self-contained Windows app
 
 ---
 
-## 🖥 Preview
+## 🖥 Preview (v1.2.0)
 
-*(Coming Soon)*  
-A screenshot of the app window.
+### Group View
+![ToDoApp UI Screenshot Group View](./assets/todoapp-v1.2.0-groupView.png)
+
+### Task View
+![ToDoApp UI Screenshot Task View](./assets/todoapp-v1.2.0-taskView.png)
 
 ---
 
@@ -33,6 +41,8 @@ A screenshot of the app window.
 
 ## 🛠 How to Run
 
+### For Developers:
+
 1. Clone the repo:
 	```bash
 	git clone https://github.com/LostSpaceNG/ToDoApp.git
@@ -41,15 +51,27 @@ A screenshot of the app window.
 3. Build & run the project (F5)
 4. Use the app 🎉
 
+### For Users:
+
+1. Download the self-contained .exe release
+2. No installation or .NET Runtime required
+3. Just run ToDoApp.exe
+
+---
+
+## 📈 Version History
+
+See full changelog in [📄 CHANGELOG.md](./CHANGELOG.md)
+
 ---
 
 ## 💡 Future Ideas
 
-- Edit tasks
 - Set due dates & reminders
 - Save to cloud or sync across devices
-- Categorize tasks by topics
 - Light/Dark mode themes
+- Search feature
+- Area for additional notes
 - UI Refinements
 
 ---
@@ -64,6 +86,8 @@ MIT License — feel free to use, learn from, or improve this project.
 
 Made with love by *`Spaced Out`* — a C# developer learning in public.
 
+GitHub: [LostSpaceNG](https://github.com/LostSpaceNG)
+
 ---
 
-## 📘 [Development Process Documentation](DEVDOC.md)
+## 📘 [Development Process Documentation](./DEVDOC.md)

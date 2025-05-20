@@ -18,7 +18,10 @@ C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\bin\Debug\net8.0-windows\runtim
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\bin\Debug\net8.0-windows\runtimes\unix\lib\net8.0\System.Data.SqlClient.dll
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Data.SqlClient.dll
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.csproj.AssemblyReference.cache
+C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.Controls.GroupCard.resources
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.Form1.resources
+C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.PromptForm.resources
+C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.Properties.Resources.resources
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.csproj.GenerateResource.cache
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\ganta\Desktop\Portfolio\ToDoApp\ToDoApp\obj\Debug\net8.0-windows\ToDoApp.AssemblyInfoInputs.cache

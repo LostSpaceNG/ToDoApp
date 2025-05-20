@@ -23,6 +23,12 @@ To create a simple, minimal, and functional To-Do List application using a `Chec
 
 ---
 
+## 📈 Version History
+
+For a full list of version changes and update history, see the [📄 CHANGELOG.md](./CHANGELOG.md) file.
+
+---
+
 ## 🧱 Development Timeline & Phases
 
 ✅ **Phase 1: Setup**
@@ -106,9 +112,13 @@ To create a simple, minimal, and functional To-Do List application using a `Chec
 
 ---
 
-## 📷 Screenshot Placeholder
+## 🖥 Preview (v1.2.0)
 
-(To be added later to showcase final UI of the app)
+### Group View
+![ToDoApp UI Screenshot Group View](./assets/todoapp-v1.2.0-groupView.png)
+
+### Task View
+![ToDoApp UI Screenshot Task View](./assets/todoapp-v1.2.0-taskView.png)
 
 ---
 
@@ -137,40 +147,4 @@ MIT License
 
 Beginner-friendly C# Developer building a portfolio with clean, real-world projects.
 
-GitHub: https://github.com/LostSpaceNG
-
-
----
-
--- # -- # -- # -- # -- # -- # -- # -- # -- # -- # -- # -- # --
-
----
-
-## 📌 Version 1.1.0 – Task Groups & Filtering (Released on: 24-04-2025)
-
-### ✨ New Features
-
-- Introduced **Task Groups** for organizing to-dos by category
-- Created `TaskGroups` table in database
-- Tasks now belong to a selected group via `GroupId`
-- Added group selection dropdown
-- Added filtering logic to load only tasks for selected group
-
-### 🔧 Technical Improvements
-
-- Refactored `LoadTasks()` method to accept group filter
-- Connected group dropdown with filtering logic
-- Introduced constant `AppVersion` displayed in app title
-
-### 🧪 Testing & Usage
-
-- Build and run the app from Visual Studio
-- Found at: `/bin/Debug/netX.X-windows/ToDoApp.exe`
-- Use desktop shortcut for quick UX testing
-
----
-
-Next planned version: `v1.2.0`
-
-- UI redesign: Home screen with Task Group icons
-- Better task navigation and user experience
+GitHub: [LostSpaceNG](https://github.com/LostSpaceNG)
